@@ -5,14 +5,32 @@ public class informaIdade {
     public static void main (String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        //TODO: Validar nome do usuário
-        //Não permitir números
-        //Não permitir caracteres
-        //Limitar quantidade de caracteres
-        //Não permitir em branco ou nulo
         //Solicitar o nome do usuário
-        System.out.println("Digite o seu nome: ");
-        String nome = scanner.nextLine();
+        String nome;
+            while (true) {
+                System.out.println("Digite o seu nome: (somente letras, espaços, até 50 caracteres)");
+                nome = scanner.nextLine().trim();
+
+                //Não permitir em branco ou nulo
+                if (nome.isEmpty()) {
+                    System.out.println("Erro: O nome não pode estar em branco!");
+                    continue;
+                }
+
+                //Limitar quantidade de caracteres
+                if (nome.length() > 50) {
+                    System.out.println("Erro: O nome não pode exceder 50 caracteres!");
+                    continue;
+                }
+
+                //Não permitir caracteres
+                //Não permitir números
+                if (!nome.matches("[\\p{L} ]+")) {
+                    System.out.println("Erro: O nome deve conter apenas letras e espaços!");
+                    continue;
+                }
+                break;
+            }
 
         //TODO: Validar ano de nascimento do usuário
         //Não permitir letras
