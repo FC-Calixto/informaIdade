@@ -1,11 +1,12 @@
-import java.time.Year;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class informaIdade {
     public static void main (String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        //TODO: Calcular a idade baseada na data de nascimento no formato DD/MM/AAAA
 
         //Solicitar o nome do usuário
         String nome;
@@ -34,44 +35,50 @@ public class informaIdade {
                 break;
             }
 
-        //Solicitar ano de nascimento do usuário
-        int anoNascimento = 0;
-        int anoAtual = Year.now().getValue();
+        //Solicitar data de nascimento do usuário
+        LocalDate dataNascimento = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate hoje = LocalDate.now();
 
             while (true) {
-                System.out.println("Digite o seu ano de nascimento: (Formato AAAA)");
-                String inputAno = scanner.nextLine().trim();
+                System.out.println("Digite sua data de nascimento: (Formato DD/MM/AAAA)");
+                String inputData = scanner.nextLine().trim();
 
                 //Não permitir em branco ou nulo
-                if (inputAno.isEmpty()) {
+                if (inputData.isEmpty()) {
                     System.out.println("Erro: O ano de nascimento não pode estar em branco.");
                     continue;
                 }
 
-                //Validar formato AAAA
-                if (!inputAno.matches("\\d{4}")) {
-                    System.out.println("Erro: O ano deve conter exatamente 4 dígitos numéricos.");
-                    continue;
+                //Remover caracteres não numéricos
+                inputData = inputData.replaceAll("[^0-9]", "");
+
+                //Inserir barras para formatar no padrão DD/MM/AAAA
+                if (inputData.length() == 8) {
+                    inputData = inputData.substring(0, 2) + "/"
+                            + inputData.substring(2, 4) + "/"
+                            + inputData.substring(4, 8);
                 }
 
-                //Não permitir letras e caracteres
+                //Não permitir data futura
+                //Validar formato DD/MM/AAAA
                 try {
-                    anoNascimento = Integer.parseInt(inputAno);
-                } catch (NumberFormatException e) {
-                    System.out.println("Erro: Entrada inválida. Digite apenas números.");
-                    continue;
-                }
+                    dataNascimento = LocalDate.parse(inputData, formatter);
 
-                //Validar ano de nascimento menor que o ano atual
-                if (anoNascimento >= anoAtual) {
-                    System.out.println("Erro: O ano de nascimento deve ser menor que o ano atual (" + anoAtual + ").");
+                    if (dataNascimento.isAfter(hoje)) {
+                        System.out.println("Erro: A data de nascimento não pode ser futura");
+                        continue;
+                    }
+
+                } catch (DateTimeException e) {
+                    System.out.println("Erro: Entrada inválida. Use o formato DD/MM/AAAA, com dia e mês válidos.");
                     continue;
                 }
                 break;
             }
 
         //Calcular a idade do usuário
-        int idade = anoAtual - anoNascimento;
+        int idade = Period.between(dataNascimento, hoje).getYears();
 
         //Exibir a idade do usuário
         System.out.println("Olá " + nome + ", você têm " + idade + " anos.");
