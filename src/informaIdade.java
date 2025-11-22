@@ -5,6 +5,8 @@ public class informaIdade {
     public static void main (String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        //TODO: Calcular a idade baseada na data de nascimento no formato DD/MM/AAAA
+
         //Solicitar o nome do usuário
         String nome;
             while (true) {
@@ -32,18 +34,43 @@ public class informaIdade {
                 break;
             }
 
-        //TODO: Validar ano de nascimento do usuário
-        //Não permitir letras
-        //Não permitir caracteres
-        //Limitar quantidade de caracteres
-        //Formatar para AAAA
-        //Não permitir em branco ou nulo
-        //Ano informado tem que ser menor do que ano atual
-        System.out.println("Digite o seu ano de nascimento: ");
-        int anoNascimento = scanner.nextInt();
+        //Solicitar ano de nascimento do usuário
+        int anoNascimento = 0;
+        int anoAtual = Year.now().getValue();
+
+            while (true) {
+                System.out.println("Digite o seu ano de nascimento: (Formato AAAA)");
+                String inputAno = scanner.nextLine().trim();
+
+                //Não permitir em branco ou nulo
+                if (inputAno.isEmpty()) {
+                    System.out.println("Erro: O ano de nascimento não pode estar em branco.");
+                    continue;
+                }
+
+                //Validar formato AAAA
+                if (!inputAno.matches("\\d{4}")) {
+                    System.out.println("Erro: O ano deve conter exatamente 4 dígitos numéricos.");
+                    continue;
+                }
+
+                //Não permitir letras e caracteres
+                try {
+                    anoNascimento = Integer.parseInt(inputAno);
+                } catch (NumberFormatException e) {
+                    System.out.println("Erro: Entrada inválida. Digite apenas números.");
+                    continue;
+                }
+
+                //Validar ano de nascimento menor que o ano atual
+                if (anoNascimento >= anoAtual) {
+                    System.out.println("Erro: O ano de nascimento deve ser menor que o ano atual (" + anoAtual + ").");
+                    continue;
+                }
+                break;
+            }
 
         //Calcular a idade do usuário
-        int anoAtual = Year.now().getValue();
         int idade = anoAtual - anoNascimento;
 
         //Exibir a idade do usuário
