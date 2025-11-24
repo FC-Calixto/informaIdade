@@ -14,8 +14,8 @@ Programa em Java que calcula a idade do usuário a partir da data de nascimento 
 ## Como usar
 
 1. Clone ou baixe este repositório.
-2. Compile o programa: javac informaIdade.java
-3. Execute o programa: java informaIdade
+2. Compile o programa: javac InformaIdade.java
+3. Execute o programa: java InformaIdade
 4. Siga as instruções na tela para digitar seu nome e data de nascimento.
 
 ## Tecnologias
